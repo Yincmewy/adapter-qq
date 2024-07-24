@@ -345,6 +345,7 @@ class Adapter(BaseAdapter):
             if isinstance(payload, Dispatch):
                 try:
                     event = self.payload_to_event(payload)
+                    print(event)
                 except Exception as e:
                     log(
                         "WARNING",
@@ -402,6 +403,8 @@ class Adapter(BaseAdapter):
 
     @staticmethod
     def payload_to_event(payload: Dispatch) -> Event:
+        import json
+        payload.data['real_id'] = json.loads(payload.json()).get('id', '')
         EventClass = EVENT_CLASSES.get(payload.type, None)
         if EventClass is None:
             log("WARNING", f"Unknown payload type: {payload.type}")
